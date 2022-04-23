@@ -1,37 +1,9 @@
-## Welcome to GitHub Pages
+## Практичне програмування з Python
 
-You can use the [editor on GitHub](https://github.com/slehkyi/python-course-ua/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Базою для цього курсу став інший курс по Пітону [Practical Python](https://dabeaz-course.github.io/practical-python/) від [@dabeaz](https://github.com/dabeaz). Оригінальний курс зроблений під Python 3.6, а тут ми працюватимемо з Python 3.10, - великої різниці між цими версіями нема.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Лінки на автора оригіналу - David Beazley [https://dabeaz.com](https://dabeaz.com), Twitter [@dabeaz](https://twitter.com/dabeaz)
 
-### Markdown
+Переклад та адаптація українською - Сергій Легкий [https://sergilehkyi.com](https://sergilehkyi.com), [LinkedIn](https://www.linkedin.com/in/serhiilehkyi/), [Twitter](https://twitter.com/sergi_lehkyi), [Instagram](https://www.instagram.com/sergilehkyi/), [Medium](https://medium.com/@sergilehkyi).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/slehkyi/python-course-ua/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### Далі буде...
