@@ -11,4 +11,4 @@
 * [8. Testing, Logging, and Debugging](08_Testing_debugging/00_Overview.md)
 * [9. Packages](09_Packages/00_Overview.md)
 
-[Home](https://github.com/slehkyi/python-course-ua/tree/gh-pages/index.md)
+[Home](../index.md)
