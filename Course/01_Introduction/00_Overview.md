@@ -1,4 +1,4 @@
-[Зміст](../Contents.md) \| [Наступний розділ (2 Робота з даними)](../02_Working_with_data/00_Overview.md)
+[Зміст](../Contents.md) \| [Наступний розділ (2. Робота з даними)](../02_Working_with_data/00_Overview.md)
 
 ## 1. Вступ до Python
 
@@ -13,4 +13,4 @@
 * [1.6 Файли](06_Files.md)
 * [1.7 Функції](07_Functions.md)
 
-[Зміст](../Contents.md) \| [Наступний розділ (2 Робота з даними)](../02_Working_with_data/00_Overview.md)
+[Зміст](../Contents.md) \| [Наступний розділ (2. Робота з даними)](../02_Working_with_data/00_Overview.md)
