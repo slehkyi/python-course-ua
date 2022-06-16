@@ -1,3 +1,5 @@
+### *Поки курс в розробці, він знаходиться в гілці gh-pages*
+
 ## Практичне програмування на Python
 
 Базою для цього курсу став інший курс по Пітону [Practical Python](https://dabeaz-course.github.io/practical-python/) від [@dabeaz](https://github.com/dabeaz). Оригінальний курс зроблений під Python 3.6, а тут ми працюватимемо з Python 3.8, - великої різниці між цими версіями нема.
