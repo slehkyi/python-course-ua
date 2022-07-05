@@ -361,4 +361,4 @@ dict_items([('name', 'AA'), ('shares', 75), ('price', 32.2), ('date', (6, 11, 20
 >>>
 ```
 
-[Зміст](../Contents.md) \| [Попередній розділ (1.7. Функції)](../01_Introduction/07_Functions.md) \| [Наступний розділ (2.2. Контейнери)](../02_Containers.md)
+[Зміст](../Contents.md) \| [Попередній розділ (1.7. Функції)](../01_Introduction/07_Functions.md) \| [Наступний розділ (2.2. Контейнери)](02_Containers.md)
