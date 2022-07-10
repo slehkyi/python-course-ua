@@ -2,40 +2,35 @@
 
 # 2.7 Об'єкти
 
-This section introduces more details about Python's internal object model and
-discusses some matters related to memory management, copying, and type checking.
+У цьому розділі наведено додаткові відомості про внутрішню об’єктну модель Python і обговорено деякі питання, пов’язані з керуванням пам’яттю, копіюванням і перевіркою типів.
 
-### Assignment
+### Присвоєння
 
-Many operations in Python are related to *assigning* or *storing* values.
+Багато операцій у Python пов’язані з *присвоєнням* або *збереженням* значень.
 
 ```python
-a = value         # Assignment to a variable
-s[n] = value      # Assignment to a list
-s.append(value)   # Appending to a list
-d['key'] = value  # Adding to a dictionary
+a = value         # Присвоєння змінній
+s[n] = value      # Присвоєння до списку
+s.append(value)   # Додавання до списку
+d['key'] = value  # Додавання до словника
 ```
 
-*A caution: assignment operations **never make a copy** of the value being assigned.*
-All assignments are merely reference copies (or pointer copies if you prefer).
+*Застереження: операції призначення **ніколи не створюють копію** присвоюваного значення.* Усі призначення є лише довідковими копіями (або копіями вказівників (pointers), якщо хочете).
 
-### Assignment example
+### Приклад присвоєння
 
-Consider this code fragment.
-
+Розглянемо наступний фрагмент коду.
 ```python
 a = [1,2,3]
 b = a
 c = [a,b]
 ```
 
-A picture of the underlying memory operations. In this example, there
-is only one list object `[1,2,3]`, but there are four different
-references to it.
+Зображення основних операцій пам'яті. У цьому прикладі є лише один об’єкт списку `[1,2,3]`, але чотири різні посилання на нього.
 
-![References](references.png)
+![Посилання](references.jpg)
 
-This means that modifying a value affects *all* references.
+Це означає, що зміна значення впливає на *всі* посилання.
 
 ```python
 >>> a.append(999)
@@ -48,13 +43,11 @@ This means that modifying a value affects *all* references.
 >>>
 ```
 
-Notice how a change in the original list shows up everywhere else
-(yikes!).  This is because no copies were ever made. Everything is
-pointing to the same thing.
+Зверніть увагу, як зміни в оригінальному списку відображаються скрізь (упс!). Це тому, що жодних копій ніколи не було зроблено. Усе вказує на одне й те саме значення.
 
-### Reassigning values
+### Перепризначення значень
 
-Reassigning a value *never* overwrites the memory used by the previous value.
+Перепризначення значення *ніколи* не перезаписує пам’ять, яку використовувало попереднє значення.
 
 ```python
 a = [1,2,3]
@@ -62,24 +55,20 @@ b = a
 a = [4,5,6]
 
 print(a)      # [4, 5, 6]
-print(b)      # [1, 2, 3]    Holds the original value
+print(b)      # [1, 2, 3]    Утримує оригінальне значення
 ```
 
-Remember: **Variables are names, not memory locations.**
+Пам’ятайте: **Змінні – це імена, а не місця в пам’яті.**
 
-### Some Dangers
+### Деякі небезпеки
 
-If you don't know about this sharing, you will shoot yourself in the
-foot at some point.  Typical scenario. You modify some data thinking
-that it's your own private copy and it accidentally corrupts some data
-in some other part of the program.
+Якщо ви не знаєте про цю особливість, ви колись вистрелите собі в ногу. Типовий сценарій. Ви змінюєте деякі дані, думаючи, що це ваша особиста копія, і це випадково пошкоджує деякі дані в іншій частині програми.
 
-*Comment: This is one of the reasons why the primitive datatypes (int,
- float, string) are immutable (read-only).*
+*Коментар: це одна з причин, чому примітивні типи даних (int, float, string) є незмінними (тільки для читання).*
 
-### Identity and References
+### Ідентичність та посилання
 
-Use the `is` operator to check if two values are exactly the same object.
+Використовуйте оператор `is`, щоб перевірити, чи є два значення абсолютно однаковими об’єктами.
 
 ```python
 >>> a = [1,2,3]
@@ -89,8 +78,7 @@ True
 >>>
 ```
 
-`is` compares the object identity (an integer).  The identity can be
-obtained using `id()`.
+`is` порівнює ідентичність об’єкта (ціле число). Ідентичність можна отримати за допомогою `id()`.
 
 ```python
 >>> id(a)
@@ -100,9 +88,7 @@ obtained using `id()`.
 >>>
 ```
 
-Note: It is almost always better to use `==` for checking objects.  The behavior
-of `is` is often unexpected:
-
+Примітка. Для порівняння об’єктів майже завжди краще використовувати `==`. Поведінка `is` часто є неочікуваною:
 ```python
 >>> a = [1,2,3]
 >>> b = a
@@ -115,11 +101,11 @@ False
 True
 >>>
 ```
+Тому, що `с` - це вже новий об'єкт, який має інше `id`, саме тому `is` і повертає `False`, бо незважаючи на те, що списки однакові - це два різні об'єкти.
 
-### Shallow copies
+### Неглибокі копії
 
-Lists and dicts have methods for copying.
-
+Списки та словники мають методи копіювання.
 ```python
 >>> a = [2,3,[100,101],4]
 >>> b = list(a) # Make a copy
@@ -127,8 +113,7 @@ Lists and dicts have methods for copying.
 False
 ```
 
-It's a new list, but the list items are shared.
-
+Це новий список, але елементи списку є спільними.
 ```python
 >>> a[2].append(102)
 >>> b[2]
@@ -139,16 +124,13 @@ True
 >>>
 ```
 
-For example, the inner list `[100, 101, 102]` is being shared.
-This is known as a shallow copy.  Here is a picture.
+Наприклад, надається спільний доступ до внутрішнього списку `[100, 101, 102]`. Це відомо як поверхнева копія. Ось малюнок.
 
-![Shallow copy](shallow.png)
+![Поверхнева копія](shallow.jpg)
 
-### Deep copies
+### Глибокі копії
 
-Sometimes you need to make a copy of an object and all the objects contained within it.
-You can use the `copy` module for this:
-
+Іноді потрібно зробити копію об’єкта та всіх об’єктів, які в ньому містяться. Для цього можна використовувати модуль `copy`:
 ```python
 >>> a = [2,3,[100,101],4]
 >>> import copy
@@ -161,10 +143,9 @@ False
 >>>
 ```
 
-### Names, Values, Types
+### Імена, значення, типи
 
-Variable names do not have a *type*. It's only a name.
-However, values *do* have an underlying type.
+Імена змінних не мають *типу*. Це лише назва. Однак значення *мають* базовий тип.
 
 ```python
 >>> a = 42
@@ -175,40 +156,29 @@ However, values *do* have an underlying type.
 <type 'str'>
 ```
 
-`type()` will tell you what it is. The type name is usually used as a function
-that creates or converts a value to that type.
+`type()` скаже вам, що є що. Ім'я типу зазвичай використовується як функція, яка створює або перетворює значення в цей тип.
 
-### Type Checking
+### Перевірка типу
 
-How to tell if an object is a specific type.
-
+Як визначити, чи є об’єкт певного типу.
 ```python
 if isinstance(a, list):
     print('a is a list')
 ```
 
-Checking for one of many possible types.
-
+Перевірка одного з багатьох можливих типів.
 ```python
 if isinstance(a, (list,tuple)):
     print('a is a list or tuple')
 ```
 
-*Caution: Don't go overboard with type checking. It can lead to
-excessive code complexity.  Usually you'd only do it if doing
-so would prevent common mistakes made by others using your code.
-*
+*Увага: не перестарайтеся з перевіркою типу. Це може призвести до надмірної складності коду. Зазвичай ви робите це, лише якщо це запобігатиме поширеним помилкам, які допускають інші користувачі вашого коду.*
 
-### Everything is an object
+### Усе є об'єктом
 
-Numbers, strings, lists, functions, exceptions, classes, instances,
-etc. are all objects.  It means that all objects that can be named can
-be passed around as data, placed in containers, etc., without any
-restrictions.  There are no *special* kinds of objects.  Sometimes it
-is said that all objects are "first-class".
+Числа, рядки, списки, функції, винятки, класи, екземпляри тощо є об’єктами. Це означає, що всі об’єкти, які можна назвати, можна передавати як дані, поміщати в контейнери тощо без будь-яких обмежень. *Особливих* типів об'єктів немає. Іноді кажуть, що всі об'єкти «першокласні».
 
-A simple example:
-
+Простий приклад:
 ```python
 >>> import math
 >>> items = [abs, math, ValueError ]
@@ -228,26 +198,22 @@ Failed!
 >>>
 ```
 
-Here, `items` is a list containing a function, a module and an
-exception.  You can directly use the items in the list in place of the
-original names:
-
+Тут "items" — це список, що містить функцію, модуль і виняток. Ви можете безпосередньо використовувати елементи зі списку замість оригінальних назв:
 ```python
 items[0](-45)       # abs
 items[1].sqrt(2)    # math
 except items[2]:    # ValueError
 ```
 
-With great power comes responsibility.  Just because you can do that doesn't mean you should.
+З великою силою приходить велика відповідальність. Просто тому, що ви можете таке робити, ще не означає, що ви повинні.
 
 ## Exercises
 
-In this set of exercises, we look at some of the power that comes from first-class
-objects.
+У цьому комплексі вправ ми розглянемо частину потужності, яку надають вам першокласні об’єкти.
 
-### Exercise 2.24: First-class Data
+### Вправа 2.24: Першокласні дані
 
-In the file `Data/portfolio.csv`, we read data organized as columns that look like this:
+У файлі `Data/portfolio.csv` ми читаємо дані, організовані у вигляді стовпців, які виглядають так:
 
 ```csv
 name,shares,price
@@ -256,8 +222,7 @@ name,shares,price
 ...
 ```
 
-In previous code, we used the `csv` module to read the file, but still
-had to perform manual type conversions. For example:
+У попередньому коді ми використовували модуль `csv` для читання файлу, але все одно доводилося виконувати перетворення типів вручну. Наприклад:
 
 ```python
 for row in rows:
@@ -266,24 +231,17 @@ for row in rows:
     price  = float(row[2])
 ```
 
-This kind of conversion can also be performed in a more clever manner
-using some list basic operations.
+Цей вид перетворення також можна виконати більш розумним способом, використовуючи деякі базові операції зі списком.
 
-Make a Python list that contains the names of the conversion functions
-you would use to convert each column into the appropriate type:
-
+Створіть список Python, який містить назви функцій перетворення, які ви б використовували для перетворення кожного стовпця у відповідний тип:
 ```python
 >>> types = [str, int, float]
 >>>
 ```
 
-The reason you can even create this list is that everything in Python
-is *first-class*.  So, if you want to have a list of functions, that’s
-fine.  The items in the list you created are functions for converting
-a value `x` into a given type (e.g., `str(x)`, `int(x)`, `float(x)`).
+Причина, чому ви навіть можете створити цей список, полягає в тому, що все в Python є *першокласним*. Отже, якщо ви хочете мати список функцій, це окей. Елементи у створеному вами списку є функціями для перетворення значення `x` у певний тип (наприклад, `str(x)`, `int(x)`, `float(x)`).
 
-Now, read a row of data from the above file:
-
+Тепер прочитайте рядок даних із файлу вище:
 ```python
 >>> import csv
 >>> f = open('Data/portfolio.csv')
@@ -295,9 +253,7 @@ Now, read a row of data from the above file:
 >>>
 ```
 
-As noted, this row isn’t enough to do calculations because the types
-are wrong. For example:
-
+Як зазначалося, цього рядка недостатньо для обчислень, оскільки типи неправильні. Наприклад:
 ```python
 >>> row[1] * row[2]
 Traceback (most recent call last):
@@ -306,8 +262,7 @@ TypeError: can't multiply sequence by non-int of type 'str'
 >>>
 ```
 
-However, maybe the data can be paired up with the types you specified
-in `types`. For example:
+Однак, можливо, дані можна об’єднати в пару з типами, які ви вказали в `types`. Наприклад:
 
 ```python
 >>> types[1]
@@ -317,32 +272,28 @@ in `types`. For example:
 >>>
 ```
 
-Try converting one of the values:
-
+Спробуйте перетворити одне зі значень:
 ```python
->>> types[1](row[1])     # Same as int(row[1])
+>>> types[1](row[1])     # Те ж що і int(row[1])
 100
 >>>
 ```
 
-Try converting a different value:
-
+Спробуйте конвертувати інше значення:
 ```python
->>> types[2](row[2])     # Same as float(row[2])
+>>> types[2](row[2])     # Те ж що і float(row[2])
 32.2
 >>>
 ```
 
-Try the calculation with converted values:
-
+Спробуйте обчислення з перетвореними значеннями:
 ```python
 >>> types[1](row[1])*types[2](row[2])
 3220.0000000000005
 >>>
 ```
 
-Zip the column types with the fields and look at the result:
-
+Запакуйте (zipніть) типи стовпців з полями та подивіться на результат:
 ```python
 >>> r = list(zip(types, row))
 >>> r
@@ -350,11 +301,9 @@ Zip the column types with the fields and look at the result:
 >>>
 ```
 
-You will notice that this has paired a type conversion with a
-value. For example, `int` is paired with the value `'100'`.
+Ви помітите, що це поєднало перетворення типу зі значенням. Наприклад, `int` поєднується зі значенням `'100'`.
 
-The zipped list is useful if you want to perform conversions on all of
-the values, one after the other. Try this:
+Архівований список корисний, якщо потрібно виконати перетворення для всіх значень одне за одним. Спробуйте:
 
 ```python
 >>> converted = []
@@ -368,14 +317,9 @@ the values, one after the other. Try this:
 >>>
 ```
 
-Make sure you understand what’s happening in the above code.  In the
-loop, the `func` variable is one of the type conversion functions
-(e.g., `str`, `int`, etc.) and the `val` variable is one of the values
-like `'AA'`, `'100'`.  The expression `func(val)` is converting a
-value (kind of like a type cast).
+Переконайтеся, що ви розумієте, що відбувається в наведеному вище коді. У циклі змінна `func` є однією з функцій перетворення типу (наприклад, `str`, `int` тощо), а змінна `val` є одним із значень, таких як `'AA'`, `'100'`. Вираз `func(val)` перетворює значення (на кшталт касту типу).
 
-The above code can be compressed into a single list comprehension.
-
+Наведений вище код можна стиснути в єдиний рядок за допомогою компрехенції списку.
 ```python
 >>> converted = [func(val) for func, val in zip(types, row)]
 >>> converted
@@ -383,12 +327,9 @@ The above code can be compressed into a single list comprehension.
 >>>
 ```
 
-### Exercise 2.25: Making dictionaries
+### Вправа 2.25: Створення словників
 
-Remember how the `dict()` function can easily make a dictionary if you
-have a sequence of key names and values?  Let’s make a dictionary from
-the column headers:
-
+Пам’ятаєте, як функція `dict()` може легко створити словник, якщо у вас є послідовність назв ключів і значень? Давайте створимо словник із заголовків стовпців:
 ```python
 >>> headers
 ['name', 'shares', 'price']
@@ -399,23 +340,18 @@ the column headers:
 >>>
 ```
 
-Of course, if you’re up on your list-comprehension fu, you can do the
-whole conversion in a single step using a dict-comprehension:
-
+Звичайно, якщо ваше кунг-фу компрехенції списків уже найвищого рівня, ви можете виконати всі перетворення за один крок за допомогою компрехенції словника:
 ```python
 >>> { name: func(val) for name, func, val in zip(headers, types, row) }
 {'price': 32.2, 'name': 'AA', 'shares': 100}
 >>>
 ```
 
-### Exercise 2.26: The Big Picture
+### Вправа 2.26: Загальна картина
 
-Using the techniques in this exercise, you could write statements that
-easily convert fields from just about any column-oriented datafile
-into a Python dictionary.
+Використовуючи техніку в цій вправі, ви зможете писати код, який легко перетворить поля майже з будь-якого файлу даних, орієнтованого на стовпці, у словник Python.
 
-Just to illustrate, suppose you read data from a different datafile like this:
-
+Просто для ілюстрації, припустімо, що ви читаєте дані з іншого файлу даних:
 ```python
 >>> f = open('Data/dowstocks.csv')
 >>> rows = csv.reader(f)
@@ -428,7 +364,7 @@ Just to illustrate, suppose you read data from a different datafile like this:
 >>>
 ```
 
-Let’s convert the fields using a similar trick:
+Давайте перетворимо поля за допомогою подібного прийому:
 
 ```python
 >>> types = [str, float, str, str, float, float, float, float, int]
@@ -445,10 +381,8 @@ Let’s convert the fields using a similar trick:
 >>>
 ```
 
-Bonus: How would you modify this example to additionally parse the
-`date` entry into a tuple such as `(6, 11, 2007)`?
+Бонус: як би ви змінили цей приклад, щоб додатково проаналізувати запис `date` у таплі, наприклад `(6, 11, 2007)`?
 
-Spend some time to ponder what you’ve done in this exercise. We’ll
-revisit these ideas a little later.
+Витратьте трохи часу на те, щоб усвідомити, що ви зробили під час цієї вправи. Ми повернемося до цих ідей трохи пізніше.
 
 [Зміст](../Contents.md) \| [Попередній розділ (2.6. Компрехенція списку)](06_List_comprehension.md) \| [Наступний розділ (3. Організація програми)](../03_Program_organization/00_Overview.md)
