@@ -1,18 +1,12 @@
 [Зміст](../Contents.md) \| [Попередня частина (3. Організація програми)](../03_Program_organization/00_Overview.md) \| [Наступна частина (5. Внутрішня робота об’єктів Python)](../05_Object_model/00_Overview.md)
 
-# 4. Classes and Objects
+# 4. Класи та об'єкти
 
-So far, our programs have only used built-in Python datatypes.  In
-this section, we introduce the concept of classes and objects.  You'll
-learn about the `class` statement that allows you to make new objects.
-We'll also introduce the concept of inheritance, a tool that is commonly
-use to build extensible programs.  Finally, we'll look at a few other
-features of classes including special methods, dynamic attribute lookup,
-and defining new exceptions.
+Досі наші програми використовували лише вбудовані типи даних Python. У цьому розділі ми введемо поняття класів і об'єктів. Ви дізнаєтеся про оператор `class`, який дозволяє вам створювати нові об'єкти. Ми також познайомимося з поняттям успадкування, загальноприйнятим інструментом, що використовується для створення розширюваних програм. Нарешті, ми розглянемо ще кілька особливостей класів, включаючи спеціальні методи, динамічний пошук атрибутів, і визначення нових винятків.
 
-* [4.1 Introducing Classes](01_Class.md)
-* [4.2 Inheritance](02_Inheritance.md)
-* [4.3 Special Methods](03_Special_methods.md)
-* [4.4 Defining new Exception](04_Defining_exceptions.md)
+* [4.1. Вступ до Класів](01_Class.md)
+* [4.2. Успадкування](02_Inheritance.md)
+* [4.3. Спеціальні методи](03_Special_methods.md)
+* [4.4. Визначення нових винятків](04_Defining_exceptions.md)
 
 [Зміст](../Contents.md) \| [Попередня частина (3. Організація програми)](../03_Program_organization/00_Overview.md) \| [Наступна частина (5. Внутрішня робота об’єктів Python)](../05_Object_model/00_Overview.md)
