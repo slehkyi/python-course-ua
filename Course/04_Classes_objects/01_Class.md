@@ -19,20 +19,20 @@
 
 ```python
 >>> nums = [1, 2, 3]
->>> nums.append(4)      # Method
->>> nums.insert(1,10)   # Method
+>>> nums.append(4)      # Метод
+>>> nums.insert(1,10)   # Метод
 >>> nums
-[1, 10, 2, 3, 4]        # Data
+[1, 10, 2, 3, 4]        # Дані
 >>>
 ```
 
-`nums` is an *instance* of a list.
+`nums` - це *екземпляр* списку.
 
-Methods (`append()` and `insert()`) are attached to the instance (`nums`).
+Методи (`append()` і `insert()`) додаються до екземпляра (`nums`).
 
-### The `class` statement
+### Оператор `class`
 
-Use the `class` statement to define a new object.
+Використовуйте оператор `class`, щоб визначити новий об'єкт.
 
 ```python
 class Player:
@@ -49,13 +49,13 @@ class Player:
         self.health -= pts
 ```
 
-In a nutshell, a class is a set of functions that carry out various operations on so-called *instances*.
+У двох словах, клас — це набір функцій, які виконують різні операції над так званими *інстранціями*.
 
-### Instances
+### Інстанції
 
-Instances are the actual *objects* that you manipulate in your program.
+Інстанції — це фактичні *об’єкти*, якими ви керуєте у своїй програмі.
 
-They are created by calling the class as a function.
+Вони створюються шляхом виклику класу як функції.
 
 ```python
 >>> a = Player(2, 3)
@@ -63,15 +63,13 @@ They are created by calling the class as a function.
 >>>
 ```
 
-`a` and `b` are instances of `Player`.
+`a` і `b` є екземплярами (інстанціями) `Player`.
 
-*Emphasize: The class statement is just the definition (it does
- nothing by itself). Similar to a function definition.*
+*Підкреслюємо: оператор класу - це лише визначення (він сам по собі нічого не робить). Подібно до визначення функції.*
 
-### Instance Data
+### Дані екземпляра (інстанції)
 
-Each instance has its own local data.
-
+Кожен екземпляр має власні локальні дані.
 ```python
 >>> a.x
 2
@@ -79,51 +77,48 @@ Each instance has its own local data.
 10
 ```
 
-This data is initialized by the `__init__()`.
+Ці дані ініціалізуються використовуючи `__init__()`.
 
 ```python
 class Player:
     def __init__(self, x, y):
-        # Any value stored on `self` is instance data
+        # Будь-яке значення, збережене в `self`, є даними екземпляра
         self.x = x
         self.y = y
         self.health = 100
 ```
 
-There are no restrictions on the total number or type of attributes stored.
+Немає обмежень на загальну кількість або тип збережених атрибутів.
 
-### Instance Methods
+### Методи екземплярів
 
-Instance methods are functions applied to instances of an object.
+Методи екземплярів — це функції, які застосовуються до екземплярів об’єкта.
 
 ```python
 class Player:
     ...
-    # `move` is a method
+    # `move` є методом
     def move(self, dx, dy):
         self.x += dx
         self.y += dy
 ```
 
-The object itself is always passed as first argument.
+Сам об'єкт завжди передається як перший аргумент.
 
 ```python
 >>> a.move(1, 2)
 
-# matches `a` to `self`
-# matches `1` to `dx`
-# matches `2` to `dy`
+# `a` відповідає `self`
+# `1` відповідає `dx`
+# `2` відповідає `dy`
 def move(self, dx, dy):
 ```
 
-By convention, the instance is called `self`. However, the actual name
-used is unimportant. The object is always passed as the first
-argument. It is merely Python programming style to call this argument
-`self`.
+За домовленістю екземпляр називається `self`. Однак фактична використана назва не має значення. Об’єкт завжди передається як перший аргумент. Це просто стиль програмування Python, щоб назвати цей аргумент `self`.
 
-### Class Scoping
+### Огляд класу
 
-Classes do not define a scope of names.
+Класи не визначають область імен.
 
 ```python
 class Player:
@@ -133,31 +128,25 @@ class Player:
         self.y += dy
 
     def left(self, amt):
-        move(-amt, 0)       # NO. Calls a global `move` function
-        self.move(-amt, 0)  # YES. Calls method `move` from above.
+        move(-amt, 0)       # НІТ. Викликає глобальну функцію `move`.
+        self.move(-amt, 0)  # ТАК. Викликає метод `move` зверху.
 ```
 
-If you want to operate on an instance, you always refer to it explicitly (e.g., `self`).
+Якщо ви хочете оперувати екземпляром, ви завжди посилаєтеся на нього явно (наприклад, `self`).
 
-## Exercises
+## Вправи
 
-Starting with this set of exercises, we start to make a series of
-changes to existing code from previous sections.  It is critical that
-you have a working version of Exercise 3.18 to start.  If you don't
-have that, please work from the solution code found in the
-`Solutions/3_18` directory.  It's fine to copy it.
+Починаючи з цього набору вправ, ми починаємо вносити низку змін до існуючого коду з попередніх розділів. Для початку важливо мати робочу версію вправи 3.18. Якщо у вас його немає, працюйте з кодом рішення, який можна знайти в каталозі `Solutions/3_18`. Це ОК просто його скопіювати.
 
-### Exercise 4.1: Objects as Data Structures
+### Вправа 4.1: Об’єкти як структури даних
 
-In section 2 and 3, we worked with data represented as tuples and
-dictionaries.  For example, a holding of stock could be represented as
-a tuple like this:
+У розділах 2 і 3 ми працювали з даними, представленими у вигляді таплів і словників. Наприклад, пакет акцій можна представити у вигляді такого таплу:
 
 ```python
 s = ('GOOG',100,490.10)
 ```
 
-or as a dictionary like this:
+або як такий словник:
 
 ```python
 s = { 'name'   : 'GOOG',
@@ -166,19 +155,14 @@ s = { 'name'   : 'GOOG',
 }
 ```
 
-You can even write functions for manipulating such data.  For example:
+Ви навіть можете написати функції для маніпулювання такими даними. Наприклад:
 
 ```python
 def cost(s):
     return s['shares'] * s['price']
 ```
 
-However, as your program gets large, you might want to create a better
-sense of organization.  Thus, another approach for representing data
-would be to define a class.  Create a file called `stock.py` and
-define a class `Stock` that represents a single holding of stock.
-Have the instances of `Stock` have `name`, `shares`, and `price`
-attributes.  For example:
+Однак, коли ваша програма стає великою, ви можете створити краще відчуття організації. Таким чином, іншим підходом до представлення даних було б визначення класу. Створіть файл під назвою `stock.py` і визначте клас `Stock`, який представлятиме окремий пакет акцій. Нехай екземпляри `Stock` мають атрибути `name`, `shares` і `price`. Наприклад:
 
 ```python
 >>> import stock
@@ -192,7 +176,7 @@ attributes.  For example:
 >>>
 ```
 
-Create a few more `Stock` objects and manipulate them.  For example:
+Створіть ще кілька об’єктів `Stock` і пограйтеся ними. Наприклад:
 
 ```python
 >>> b = stock.Stock('AAPL', 50, 122.34)
@@ -207,26 +191,17 @@ Create a few more `Stock` objects and manipulate them.  For example:
 >>> for s in stocks:
      print(f'{s.name:>10s} {s.shares:>10d} {s.price:>10.2f}')
 
-... look at the output ...
+... подивіться на результат ...
 >>>
 ```
 
-One thing to emphasize here is that the class `Stock` acts like a
-factory for creating instances of objects.  Basically, you call
-it as a function and it creates a new object for you.  Also, it must
-be emphasized that each object is distinct---they each have their
-own data that is separate from other objects that have been created.
+Тут слід підкреслити, що клас `Stock` діє як фабрика для створення екземплярів об’єктів. По суті, ви викликаєте це як функцію, і вона створює для вас новий об’єкт. Крім того, слід підкреслити, що кожен об’єкт є окремим --- кожен з них має власні дані, які відокремлені від інших об’єктів, які були створені.
 
-An object defined by a class is somewhat similar to a dictionary--just
-with somewhat different syntax.  For example, instead of writing
-`s['name']` or `s['price']`, you now write `s.name` and `s.price`.
+Об’єкт, визначений класом, чимось схожий на словник, але має дещо інший синтаксис. Наприклад, замість того, щоб писати `s['name']` або `s['price']`, тепер ви пишете `s.name` і `s.price`.
 
-### Exercise 4.2: Adding some Methods
+### Вправа 4.2: Додавання деяких методів
 
-With classes, you can attach functions to your objects.  These are
-known as methods and are functions that operate on the data
-stored inside an object.  Add a `cost()` and `sell()` method to your
-`Stock` object.  They should work like this:
+За допомогою класів ви можете додавати функції до своїх об’єктів. Вони відомі як методи та є функціями, які працюють з даними, що зберігаються всередині об’єкта. Додайте методи `cost()` і `sell()` до свого об’єкта `Stock`. Вони повинні працювати так:
 
 ```python
 >>> import stock
@@ -243,10 +218,9 @@ stored inside an object.  Add a `cost()` and `sell()` method to your
 >>>
 ```
 
-### Exercise 4.3: Creating a list of instances
+### Вправа 4.3: Створення списку екземплярів
 
-Try these steps to make a list of Stock instances from a list of
-dictionaries. Then compute the total cost:
+Спробуйте виконати ці дії, щоб створити список екземплярів Stock зі списку словників. Потім обчисліть загальну вартість:
 
 ```python
 >>> import fileparse
@@ -263,18 +237,13 @@ dictionaries. Then compute the total cost:
 >>>
 ```
 
-### Exercise 4.4: Using your class
+### Вправа 4.4: Використання вашого класу
 
-Modify the `read_portfolio()` function in the `report.py` program so
-that it reads a portfolio into a list of `Stock` instances as just
-shown in Exercise 4.3.  Once you have done that, fix all of the code
-in `report.py` and `pcost.py` so that it works with `Stock` instances
-instead of dictionaries.
+Змініть функцію `read_portfolio()` у програмі `report.py` так, щоб вона зчитувала портфоліо в список екземплярів `Stock`, як щойно було показано у вправі 4.3. Зробивши це, виправте весь код у `report.py` і `pcost.py`, щоб він працював із екземплярами `Stock` замість словників.
 
-Hint: You should not have to make major changes to the code.  You will mainly
-be changing dictionary access such as `s['shares']` into `s.shares`.
+Підказка: вам не доведеться вносити серйозні зміни в код. Здебільшого ви змінюватимете доступ до словника, наприклад `s['shares']` на `s.shares`.
 
-You should be able to run your functions the same as before:
+Ви повинні мати можливість запускати свої функції так само, як і раніше:
 
 ```python
 >>> import pcost
