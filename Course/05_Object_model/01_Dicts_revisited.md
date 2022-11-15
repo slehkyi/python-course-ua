@@ -1,13 +1,12 @@
 [Зміст](../Contents.md) \| [Попередній розділ (4.4. Визначення винятків)](../04_Classes_objects/04_Defining_exceptions.md) \| [Наступний розділ (5.2 Методи інкапсуляції)](02_Classes_encapsulation.md)
 
-# 5.1 Dictionaries Revisited
+# 5.1 Перегляд словників
 
-The Python object system is largely based on an implementation
-involving dictionaries.  This section discusses that.
+Об'єктна система Python значною мірою базується на реалізації із використанням словників. У цьому розділі це обговоримо.
 
-### Dictionaries, Revisited
+### Словники, переглянуто
 
-Remember that a dictionary is a collection of named values.
+Пам’ятайте, що словник – це набір іменованих значень.
 
 ```python
 stock = {
@@ -17,14 +16,11 @@ stock = {
 }
 ```
 
-Dictionaries are commonly used for simple data structures.  However,
-they are used for critical parts of the interpreter and may be the
-*most important type of data in Python*.
+Словники зазвичай використовуються для простих структур даних. Однак вони використовуються для критичних частин інтерпретатора і цілком можуть бути *найважливішим типом даних у Python*.
 
-### Dicts and Modules
+### Словники і модулі
 
-Within a module, a dictionary holds all of the global variables and
-functions.
+У межах модуля словник містить усі глобальні змінні та функції.
 
 ```python
 # foo.py
@@ -37,23 +33,21 @@ def spam():
     ...
 ```
 
-If you inspect `foo.__dict__` or `globals()`, you'll see the dictionary.
+Якщо ви перевірите `foo.__dict__` або `globals()`, ви побачите словник.
 
 ```python
 {
     'x' : 42,
-    'bar' : <function bar>,
-    'spam' : <function spam>
+    'bar' : <функція bar>,
+    'spam' : <функція spam>
 }
 ```
 
-### Dicts and Objects
+### Словники та об'єкти
 
-User defined objects also use dictionaries for both instance data and
-classes.  In fact, the entire object system is mostly an extra layer
-that's put on top of dictionaries.
+Визначені користувачем об’єкти також використовують словники як для даних екземплярів, так і для класів. Насправді вся система об’єктів — це здебільшого додатковий рівень, який розміщується поверх словників.
 
-A dictionary holds the instance data, `__dict__`.
+Словник містить дані екземпляра, `__dict__`.
 
 ```python
 >>> s = Stock('GOOG', 100, 490.1)
@@ -61,7 +55,7 @@ A dictionary holds the instance data, `__dict__`.
 {'name' : 'GOOG', 'shares' : 100, 'price': 490.1 }
 ```
 
-You populate this dict (and instance) when assigning to `self`.
+Ви заповнюєте цей словник (і екземпляр) під час призначення значень для `self`.
 
 ```python
 class Stock:
@@ -71,7 +65,7 @@ class Stock:
         self.price = price
 ```
 
-The instance data, `self.__dict__`, looks like this:
+Дані екземпляра, `self.__dict__`, виглядають так:
 
 ```python
 {
@@ -81,19 +75,18 @@ The instance data, `self.__dict__`, looks like this:
 }
 ```
 
-**Each instance gets its own private dictionary.**
+**Кожен екземпляр отримує власний приватний словник.**
 
 ```python
 s = Stock('GOOG', 100, 490.1)     # {'name' : 'GOOG','shares' : 100, 'price': 490.1 }
 t = Stock('AAPL', 50, 123.45)     # {'name' : 'AAPL','shares' : 50, 'price': 123.45 }
 ```
 
-If you created 100 instances of some class, there are 100 dictionaries
-sitting around holding data.
+Якщо ви створили 100 екземплярів якогось класу, там буде 100 словників, які зберігають дані.
 
-### Class Members
+### Члени класу
 
-A separate dictionary also holds the methods.
+Окремий словник містить і методи.
 
 ```python
 class Stock:
@@ -109,7 +102,7 @@ class Stock:
         self.shares -= nshares
 ```
 
-The dictionary is in `Stock.__dict__`.
+Словник знаходиться в `Stock.__dict__`.
 
 ```python
 {
@@ -119,10 +112,9 @@ The dictionary is in `Stock.__dict__`.
 }
 ```
 
-### Instances and Classes
+### Примірники та класи
 
-Instances and classes are linked together.  The `__class__` attribute
-refers back to the class.
+Примірники та класи пов’язані між собою. Атрибут `__class__` посилається на клас.
 
 ```python
 >>> s = Stock('GOOG', 100, 490.1)
@@ -133,55 +125,52 @@ refers back to the class.
 >>>
 ```
 
-The instance dictionary holds data unique to each instance, whereas
-the class dictionary holds data collectively shared by *all*
-instances.
+Словник екземплярів містить дані, унікальні для кожного екземпляра, тоді як словник класу містить дані, якими спільно користуються *всі* екземпляри.
 
-### Attribute Access
+### Доступ до атрибутів
 
-When you work with objects, you access data and methods using the `.` operator.
+Коли ви працюєте з об’єктами, ви отримуєте доступ до даних і методів за допомогою оператора `.` (точка).
 
 ```python
-x = obj.name          # Getting
-obj.name = value      # Setting
-del obj.name          # Deleting
+x = obj.name          # Отримання даних
+obj.name = value      # Призначення
+del obj.name          # Видалення
 ```
 
-These operations are directly tied to the dictionaries sitting underneath the covers.
+Ці операції безпосередньо пов’язані зі словниками, які знаходяться під обкладинками.
 
-### Modifying Instances
+### Зміна екземплярів
 
-Operations that modify an object update the underlying dictionary.
+Операції, які змінюють об’єкт, оновлюють словник, що лежить в основі.
 
 ```python
 >>> s = Stock('GOOG', 100, 490.1)
 >>> s.__dict__
 { 'name':'GOOG', 'shares': 100, 'price': 490.1 }
->>> s.shares = 50       # Setting
->>> s.date = '6/7/2007' # Setting
+>>> s.shares = 50       # Призначення
+>>> s.date = '6/7/2007' # Призначення
 >>> s.__dict__
 { 'name': 'GOOG', 'shares': 50, 'price': 490.1, 'date': '6/7/2007' }
->>> del s.shares        # Deleting
+>>> del s.shares        # Видалення
 >>> s.__dict__
 { 'name': 'GOOG', 'price': 490.1, 'date': '6/7/2007' }
 >>>
 ```
 
-### Reading Attributes
+### Читання атрибутів
 
-Suppose you read an attribute on an instance.
+Припустімо, ви зчитуєте атрибут екземпляра.
 
 ```python
 x = obj.name
 ```
 
-The attribute may exist in two places:
+Атрибут може існувати в двох місцях:
 
-* Local instance dictionary.
-* Class dictionary.
+* Локальний словник екземплярів.
+* Словник класу.
 
-Both dictionaries must be checked.  First, check in local `__dict__`.
-If not found, look in `__dict__` of class through `__class__`.
+Необхідно перевірити обидва словники. Спочатку перевірте локальний `__dict__`. Якщо не знайдено, перегляньте `__dict__` класу через `__class__`.
 
 ```python
 >>> s = Stock(...)
@@ -192,18 +181,18 @@ If not found, look in `__dict__` of class through `__class__`.
 >>>
 ```
 
-This lookup scheme is how the members of a *class* get shared by all instances.
+Ця схема пошуку полягає в тому, як члени *класу* отримують спільний доступ для всіх екземплярів.
 
-### How inheritance works
+### Як працює успадкування
 
-Classes may inherit from other classes.
+Класи можуть успадковуватись від інших класів.
 
 ```python
 class A(B, C):
     ...
 ```
 
-The base classes are stored in a tuple in each class.
+Базові класи зберігаються в таплі в кожному класі.
 
 ```python
 >>> A.__bases__
@@ -211,19 +200,15 @@ The base classes are stored in a tuple in each class.
 >>>
 ```
 
-This provides a link to parent classes.
+Це забезпечує посилання на батьківські класи.
 
-### Reading Attributes with Inheritance
+### Читання атрибутів із успадкуванням
 
-Logically, the process of finding an attribute is as follows. First,
-check in local `__dict__`.  If not found, look in `__dict__` of the
-class.  If not found in class, look in the base classes through
-`__bases__`.   However, there are some subtle aspects of this discussed next.
+Логічно процес пошуку атрибута виглядає наступним чином. Спочатку перевірте локальний `__dict__`. Якщо не знайдено, подивіться в `__dict__` класу. Якщо не знайдено в класі, перегляньте базові класи через `__bases__`. Однак є деякі тонкі аспекти цього, які обговорюватимуться далі.
 
-### Reading Attributes with Single Inheritance
+### Читання атрибутів з єдиним успадкуванням
 
-In inheritance hierarchies, attributes are found by walking up the
-inheritance tree in order.
+В ієрархіях успадкування атрибути можна знайти шляхом переходу по дереву успадкування по порядку.
 
 ```python
 class A: pass
@@ -232,13 +217,11 @@ class C(A): pass
 class D(B): pass
 class E(D): pass
 ```
-With single inheritance, there is single path to the top.
-You stop with the first match.
+З єдиним успадкуванням є єдиний шлях до вершини. Ви зупиняєтеся на першому співпадінні.
 
-### Method Resolution Order or MRO
+### Порядок вирішення методів або MRO
 
-Python precomputes an inheritance chain and stores it in the *MRO* attribute on the class.
-You can view it.
+Python попередньо обчислює ланцюжок успадкування та зберігає його в атрибуті *MRO* класу. Ви можете переглянути його.
 
 ```python
 >>> E.__mro__
@@ -248,13 +231,11 @@ You can view it.
 >>>
 ```
 
-This chain is called the **Method Resolution Order**.  To find an
-attribute, Python walks the MRO in order. The first match wins.
+Цей ланцюжок називається **Порядком вирішення методу**. Щоб знайти атрибут, Python проходить MRO по порядку. Перше співпадіння виграє.
 
-### MRO in Multiple Inheritance
+### MRO у множинному успадкуванні
 
-With multiple inheritance, there is no single path to the top.
-Let's take a look at an example.
+При множинному успадкуванні єдиного шляху до вершини немає. Давайте розглянемо приклад.
 
 ```python
 class A: pass
@@ -264,23 +245,21 @@ class D(B): pass
 class E(C, D): pass
 ```
 
-What happens when you access an attribute?
+Що відбувається, коли ви отримуєте доступ до атрибута?
 
 ```python
 e = E()
 e.attr
 ```
 
-An attribute search process is carried out, but what is the order? That's a problem.
+Виконується процес пошуку атрибутів, але в якому порядку? Це проблема.
 
-Python uses *cooperative multiple inheritance* which obeys some rules
-about class ordering.
+Python використовує *кооперативне множинне успадкування*, яке підпорядковується деяким правилам упорядкування класів.
 
-* Children are always checked before parents
-* Parents (if multiple) are always checked in the order listed.
+* Дітей завжди перевіряють перед батьками
+* Батьки (якщо їх декілька) завжди перевіряються в зазначеному порядку.
 
-The MRO is computed by sorting all of the classes in a hierarchy
-according to those rules.
+MRO обчислюється шляхом сортування всіх класів в ієрархії відповідно до цих правил.
 
 ```python
 >>> E.__mro__
@@ -294,15 +273,11 @@ according to those rules.
 >>>
 ```
 
-The underlying algorithm is called the "C3 Linearization Algorithm."
-The precise details aren't important as long as you remember that a
-class hierarchy obeys the same ordering rules you might follow if your
-house was on fire and you had to evacuate--children first, followed by
-parents.
+Базовий алгоритм називається «алгоритм лінеаризації C3». Точні деталі не важливі, доки ви пам’ятаєте, що ієрархія класів підпорядковується тим самим правилам порядку, яких ви могли б дотримуватися, якщо б ваш будинок горів і вам довелося евакуюватися — спочатку діти, а потім батьки.
 
-### An Odd Code Reuse (Involving Multiple Inheritance)
+### Повторне використання дивного коду (включає множинне успадкування)
 
-Consider two completely unrelated objects:
+Розглянемо два абсолютно не пов'язані об'єкти:
 
 ```python
 class Dog:
@@ -314,11 +289,11 @@ class Dog:
 
 class LoudDog(Dog):
     def noise(self):
-        # Code commonality with LoudBike (below)
+        # Спільність коду з LoudBike (внизу)
         return super().noise().upper()
 ```
 
-And
+І
 
 ```python
 class Bike:
@@ -330,17 +305,15 @@ class Bike:
 
 class LoudBike(Bike):
     def noise(self):
-        # Code commonality with LoudDog (above)
+        # Спільність коду з LoudDog (вгорі)
         return super().noise().upper()
 ```
 
-There is a code commonality in the implementation of `LoudDog.noise()` and
-`LoudBike.noise()`.  In fact, the code is exactly the same.  Naturally,
-code like that is bound to attract software engineers.
+У реалізації `LoudDog.noise()` і `LoudBike.noise()` існує спільність коду. Насправді код точно такий же. Звичайно, такий код обов’язково привабить інженерів програмного забезпечення.
 
-### The "Mixin" Pattern
+### Патерн "Mixin".
 
-The *Mixin* pattern is a class with a fragment of code.
+Шаблон *Mixin* — це клас із фрагментом коду.
 
 ```python
 class Loud:
@@ -348,8 +321,7 @@ class Loud:
         return super().noise().upper()
 ```
 
-This class is not usable in isolation.
-It mixes with other classes via inheritance.
+Цей клас не можна використовувати окремо. Він змішується з іншими класами через успадкування.
 
 ```python
 class LoudDog(Loud, Dog):
@@ -359,13 +331,11 @@ class LoudBike(Loud, Bike):
     pass
 ```
 
-Miraculously, loudness was now implemented just once and reused
-in two completely unrelated classes.  This sort of trick is one
-of the primary uses of multiple inheritance in Python.
+На диво, гучність тепер реалізована лише один раз і повторно використана у двох абсолютно не пов’язаних класах. Такий трюк є одним із основних застосувань множинного успадкування в Python.
 
-### Why `super()`
+### Чому `super()`
 
-Always use `super()` when overriding methods.
+Завжди використовуйте `super()`, коли переписуєте методи.
 
 ```python
 class Loud:
@@ -373,23 +343,17 @@ class Loud:
         return super().noise().upper()
 ```
 
-`super()` delegates to the *next class* on the MRO.
+`super()` передає *наступний клас* на MRO.
 
-The tricky bit is that you don't know what it is.  You especially don't
-know what it is if multiple inheritance is being used.
+Складність полягає в тому, що ви не знаєте, який саме. Особливо ви не знаєте, що там далі, якщо використовується множинне успадкування.
 
-### Some Cautions
+### Деякі застереження
 
-Multiple inheritance is a powerful tool. Remember that with power
-comes responsibility.  Frameworks / libraries sometimes use it for
-advanced features involving composition of components.  Now, forget
-that you saw that.
+Множинне успадкування є потужним інструментом. Пам’ятайте, що з владою приходить відповідальність. Фреймворки/бібліотеки іноді використовують його для розширених функцій, пов’язаних із композицією компонентів. Тепер забудьте, що ви це бачили.
 
-## Exercises
+## Вправи
 
-In Section 4, you defined a class `Stock` that represented a holding of stock.
-In this exercise, we will use that class.  Restart the interpreter and make a
-few instances:
+У Розділі 4 ви визначили клас `Stock`, який представляє пакет акцій. У цій вправі ми будемо використовувати цей клас. Перезапустіть інтерпретатор і зробіть кілька екземплярів:
 
 ```python
 >>> ================================ RESTART ================================
@@ -399,40 +363,34 @@ few instances:
 >>>
 ```
 
-### Exercise 5.1: Representation of Instances
+### Вправа 5.1: Представлення екземплярів
 
-At the interactive shell, inspect the underlying dictionaries of the
-two instances you created:
+В інтерактивній оболонці перевірте базові словники двох створених екземплярів:
 
 ```python
 >>> goog.__dict__
-... look at the output ...
+... перегляньте вивід ...
 >>> ibm.__dict__
-... look at the output ...
+... перегляньте вивід ...
 >>>
 ```
 
-### Exercise 5.2: Modification of Instance Data
+### Вправа 5.2: Модифікація даних екземпляра
 
-Try setting a new attribute on one of the above instances:
+Спробуйте встановити новий атрибут для одного з наведених вище випадків:
 
 ```python
 >>> goog.date = '6/11/2007'
 >>> goog.__dict__
-... look at output ...
+... перегляньте вивід ...
 >>> ibm.__dict__
-... look at output ...
+... перегляньте вивід ...
 >>>
 ```
 
-In the above output, you'll notice that the `goog` instance has a
-attribute `date` whereas the `ibm` instance does not.  It is important
-to note that Python really doesn't place any restrictions on
-attributes.  For example, the attributes of an instance are not
-limited to those set up in the `__init__()` method.
+У наведеному вище виводі ви помітите, що примірник `goog` має атрибут `date`, тоді як примірник `ibm` його не має. Важливо зазначити, що Python насправді не накладає жодних обмежень на атрибути. Наприклад, атрибути екземпляра не обмежуються тими, що встановлені в методі `__init__()`.
 
-Instead of setting an attribute, try placing a new value directly into
-the `__dict__` object:
+Замість встановлення атрибута спробуйте розмістити нове значення безпосередньо в об’єкті `__dict__`:
 
 ```python
 >>> goog.__dict__['time'] = '9:45am'
@@ -441,26 +399,21 @@ the `__dict__` object:
 >>>
 ```
 
-Here, you really notice the fact that an instance is just a layer on
-top of a dictionary.  Note: it should be emphasized that direct
-manipulation of the dictionary is uncommon--you should always write
-your code to use the (.) syntax.
+Тут ви справді помічаєте той факт, що екземпляр — це лише шар поверх словника. Примітка: слід підкреслити, що пряме маніпулювання словником є рідкістю - ви завжди повинні писати свій код із використанням синтаксису (.).
 
-### Exercise 5.3: The role of classes
+### Вправа 5.3: Роль класів
 
-The definitions that make up a class definition are shared by all
-instances of that class.  Notice, that all instances have a link back
-to their associated class:
+Визначення, які складають визначення класу, спільні для всіх екземплярів цього класу. Зауважте, що всі екземпляри мають зворотне посилання на відповідний клас:
 
 ```python
 >>> goog.__class__
-... look at output ...
+... перегляньте вивід ...
 >>> ibm.__class__
-... look at output ...
+... перегляньте вивід ...
 >>>
 ```
 
-Try calling a method on the instances:
+Спробуйте викликати метод для екземплярів:
 
 ```python
 >>> goog.cost()
@@ -470,17 +423,15 @@ Try calling a method on the instances:
 >>>
 ```
 
-Notice that the name 'cost' is not defined in either `goog.__dict__`
-or `ibm.__dict__`.  Instead, it is being supplied by the class
-dictionary.  Try this:
+Зауважте, що назва 'cost' не визначена ні в `goog.__dict__`, ні в `ibm.__dict__`. Замість цього він надається словником класу. Спробуйте це:
 
 ```python
 >>> Stock.__dict__['cost']
-... look at output ...
+... перегляньте вивід ...
 >>>
 ```
 
-Try calling the `cost()` method directly through the dictionary:
+Спробуйте викликати метод `cost()` безпосередньо через словник:
 
 ```python
 >>> Stock.__dict__['cost'](goog)
@@ -490,17 +441,16 @@ Try calling the `cost()` method directly through the dictionary:
 >>>
 ```
 
-Notice how you are calling the function defined in the class
-definition and how the `self` argument gets the instance.
+Зверніть увагу на те, як ви викликаєте функцію, визначену у визначенні класу, і як аргумент `self` отримує екземпляр.
 
-Try adding a new attribute to the `Stock` class:
+Спробуйте додати новий атрибут до класу `Stock`:
 
 ```python
 >>> Stock.foo = 42
 >>>
 ```
 
-Notice how this new attribute now shows up on all of the instances:
+Зверніть увагу, як цей новий атрибут тепер відображається в усіх екземплярах:
 
 ```python
 >>> goog.foo
@@ -510,44 +460,38 @@ Notice how this new attribute now shows up on all of the instances:
 >>>
 ```
 
-However, notice that it is not part of the instance dictionary:
+Однак зауважте, що це не є частиною словника екземплярів:
 
 ```python
 >>> goog.__dict__
-... look at output and notice there is no 'foo' attribute ...
+... подивіться на вихід і помітите, що немає атрибута "foo". ...
 >>>
 ```
 
-The reason you can access the `foo` attribute on instances is that
-Python always checks the class dictionary if it can't find something
-on the instance itself.
+Причина, по якій ви можете отримати доступ до атрибута `foo` в екземплярах, полягає в тому, що Python завжди перевіряє словник класу, якщо він не може знайти щось у самому екземплярі.
 
-Note: This part of the exercise illustrates something known as a class
-variable.  Suppose, for instance, you have a class like this:
+Примітка. Ця частина вправи ілюструє те, що називається змінною класу. Припустімо, наприклад, що у вас є такий клас:
 
 ```python
 class Foo(object):
-     a = 13                  # Class variable
+     a = 13                  # Змінна класу
      def __init__(self,b):
-         self.b = b          # Instance variable
+         self.b = b          # Змінна екземпляра
 ```
 
-In this class, the variable `a`, assigned in the body of the
-class itself, is a "class variable."  It is shared by all of the
-instances that get created.  For example:
-
+У цьому класі змінна `a`, призначена в тілі самого класу, є "змінною класу". Його спільно використовують усі створені екземпляри. Наприклад:
 ```python
 >>> f = Foo(10)
 >>> g = Foo(20)
->>> f.a          # Inspect the class variable (same for both instances)
+>>> f.a          # Перевірте змінну класу (однакова для обох екземплярів)
 13
 >>> g.a
 13
->>> f.b          # Inspect the instance variable (differs)
+>>> f.b          # Перегляньте змінну екземпляра (різняться)
 10
 >>> g.b
 20
->>> Foo.a = 42   # Change the value of the class variable
+>>> Foo.a = 42   # Змініть значення змінної класу
 >>> f.a
 42
 >>> g.a
@@ -555,10 +499,9 @@ instances that get created.  For example:
 >>>
 ```
 
-### Exercise 5.4: Bound methods
+### Вправа 5.4: Зв'язані методи
 
-A subtle feature of Python is that invoking a method actually involves
-two steps and something known as a bound method.   For example:
+Тонкою особливістю Python є те, що виклик методу насправді включає два кроки та щось, відоме як прив’язаний метод. Наприклад:
 
 ```python
 >>> s = goog.sell
@@ -570,9 +513,7 @@ two steps and something known as a bound method.   For example:
 >>>
 ```
 
-Bound methods actually contain all of the pieces needed to call a
-method.  For instance, they keep a record of the function implementing
-the method:
+Зв’язані методи фактично містять усі елементи, необхідні для виклику методу. Наприклад, вони зберігають записи функції, що реалізує метод:
 
 ```python
 >>> s.__func__
@@ -580,7 +521,7 @@ the method:
 >>>
 ```
 
-This is the same value as found in the `Stock` dictionary.
+Це те саме значення, яке міститься в словнику `Stock`.
 
 ```python
 >>> Stock.__dict__['sell']
@@ -588,8 +529,7 @@ This is the same value as found in the `Stock` dictionary.
 >>>
 ```
 
-Bound methods also record the instance, which is the `self`
-argument.
+Зв’язані методи також записують екземпляр, який є аргументом `self`.
 
 ```python
 >>> s.__self__
@@ -597,19 +537,18 @@ Stock('GOOG',75,490.1)
 >>>
 ```
 
-When you invoke the function using `()` all of the pieces come
-together.  For example, calling `s(25)` actually does this:
+Коли ви викликаєте функцію за допомогою `()`, усі частини збираються разом. Наприклад, виклик `s(25)` насправді робить це:
 
 ```python
->>> s.__func__(s.__self__, 25)    # Same as s(25)
+>>> s.__func__(s.__self__, 25)    # Такий же, як s(25)
 >>> goog.shares
 50
 >>>
 ```
 
-### Exercise 5.5: Inheritance
+### Вправа 5.5: Спадкування
 
-Make a new class that inherits from `Stock`.
+Створіть новий клас, який успадковує `Stock`.
 
 ```
 >>> class NewStock(Stock):
@@ -624,8 +563,7 @@ Yow!
 >>>
 ```
 
-Inheritance is implemented by extending the search process for attributes.
-The `__bases__` attribute has a tuple of the immediate parents:
+Спадкування реалізовано шляхом розширення процесу пошуку атрибутів. Атрибут `__bases__` має тапл безпосередніх батьків:
 
 ```python
 >>> NewStock.__bases__
@@ -633,8 +571,7 @@ The `__bases__` attribute has a tuple of the immediate parents:
 >>>
 ```
 
-The `__mro__` attribute has a tuple of all parents, in the order that
-they will be searched for attributes.
+Атрибут `__mro__` містить кортеж із усіма батьками в тому порядку, у якому вони шукатимуть атрибути.
 
 ```python
 >>> NewStock.__mro__
@@ -642,7 +579,7 @@ they will be searched for attributes.
 >>>
 ```
 
-Here's how the `cost()` method of instance `n` above would be found:
+Ось як можна знайти метод `cost()` екземпляра `n` вище:
 
 ```python
 >>> for cls in n.__class__.__mro__:
