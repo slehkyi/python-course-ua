@@ -1,39 +1,30 @@
 [Зміст](../Contents.md) \| [Попередній розділ (5.1. Перегляд словників)](01_Dicts_revisited.md) \| [Наступна частина (6. Генератори)](../06_Generators/00_Overview.md)
 
-# 5.2 Classes and Encapsulation
+# 5.2 Класи та інкапсуляція
 
-When writing classes, it is common to try and encapsulate internal details.
-This section introduces a few Python programming idioms for this including
-private variables and properties.
+Під час написання класів зазвичай намагаються інкапсулювати внутрішні деталі. У цьому розділі представлено кілька ідіом програмування Python для цього, включаючи приватні змінні та властивості.
 
-### Public vs Private.
+### Публічний проти приватного.
 
-One of the primary roles of a class is to encapsulate data and internal
-implementation details of an object.  However, a class also defines a
-*public* interface that the outside world is supposed to use to
-manipulate the object.  This distinction between implementation
-details and the public interface is important.
+Однією з основних ролей класу є інкапсуляція даних і деталей внутрішньої реалізації об’єкта. Однак клас також визначає *публічний* інтерфейс, який зовнішній світ має використовувати для маніпулювання об’єктом. Ця різниця між деталями реалізації та публічним інтерфейсом є важливою.
 
-### A Problem
+### Проблема
 
-In Python, almost everything about classes and objects is *open*.
+У Python майже все про класи та об’єкти є *відкритим*.
 
-* You can easily inspect object internals.
-* You can change things at will.
-* There is no strong notion of access-control (i.e., private class members)
+* Ви можете легко перевірити внутрішні елементи об'єкта.
+* Ви можете змінювати речі за бажанням.
+* Немає сильного поняття контролю доступу (тобто членів приватного класу)
 
-That is an issue when you are trying to isolate details of the *internal implementation*.
+Це стає проблемою, коли ви намагаєтеся виокремити деталі *внутрішньої реалізації*.
 
-### Python Encapsulation
+### Інкапсуляція Python
 
-Python relies on programming conventions to indicate the intended use
-of something.  These conventions are based on naming.  There is a
-general attitude that it is up to the programmer to observe the rules
-as opposed to having the language enforce them.
+Python покладається на конвенції програмування, щоб вказати передбачуване використання чогось. Ці умовності базуються на іменуванні. Існує загальне уявлення щодо того, що програміст повинен дотримуватись правил, а не мати мову, яка його заставляє їх дотримуватися.
 
-### Private Attributes
+### Приватні атрибути
 
-Any attribute name with leading `_` is considered to be *private*.
+Будь-яке ім’я атрибута з `_` на початку вважається *приватним*.
 
 ```python
 class Person(object):
@@ -41,8 +32,7 @@ class Person(object):
         self._name = 0
 ```
 
-As mentioned earlier, this is only a programming style. You can still
-access and change it.
+Як згадувалося раніше, це лише стиль програмування. Ви все ще можете отримати до нього доступ і змінити його.
 
 ```python
 >>> p = Person('Guido')
@@ -52,13 +42,11 @@ access and change it.
 >>>
 ```
 
-As a general rule, any name with a leading `_` is considered internal implementation
-whether it's a variable, a function, or a module name.  If you find yourself using such
-names directly, you're probably doing something wrong. Look for higher level functionality.
+За загальним правилом будь-яке ім’я з `_` на початку вважається внутрішньою реалізацією, незалежно від того, чи це ім’я змінної, функції чи модуля. Якщо ви використовуєте такі імена безпосередньо, ви, ймовірно, робите щось не так. Шукайте функціональність вищого рівня.
 
-### Simple Attributes
+### Прості атрибути
 
-Consider the following class.
+Розглянемо наступний клас.
 
 ```python
 class Stock:
@@ -68,8 +56,7 @@ class Stock:
         self.price = price
 ```
 
-A surprising feature is that you can set the attributes
-to any value at all:
+Цікавою особливістю є те, що ви можете встановити будь-яке значення для атрибута:
 
 ```python
 >>> s = Stock('IBM', 50, 91.1)
@@ -79,17 +66,17 @@ to any value at all:
 >>>
 ```
 
-You might look at that and think you want some extra checks.
+Ви можете подивитися на це і подумати, що вам потрібні додаткові перевірки.
 
 ```python
-s.shares = '50'     # Raise a TypeError, this is a string
+s.shares = '50'     # TypeError, це текст
 ```
 
-How would you do it?
+Як би ви це зробили?
 
-### Managed Attributes
+### Керовані атрибути
 
-One approach: introduce accessor methods.
+Один підхід: запровадити методи доступу.
 
 ```python
 class Stock:
@@ -98,23 +85,22 @@ class Stock:
 	    self.set_shares(shares)
 	    self.price = price
 
-    # Function that layers the "get" operation
+    # Функція, яка додає операцію "get".
     def get_shares(self):
         return self._shares
 
-    # Function that layers the "set" operation
+    # Функція, яка додає операцію "set".
     def set_shares(self, value):
         if not isinstance(value, int):
             raise TypeError('Expected an int')
         self._shares = value
 ```
 
-Too bad that this breaks all of our existing code. `s.shares = 50`
-becomes `s.set_shares(50)`
+Шкода, що це порушує весь наш існуючий код. `s.shares = 50` стає `s.set_shares(50)`
 
-### Properties
+### Властивості
 
-There is an alternative approach to the previous pattern.
+Існує альтернативний підхід до попереднього шаблону.
 
 ```python
 class Stock:
@@ -130,30 +116,27 @@ class Stock:
     @shares.setter
     def shares(self, value):
         if not isinstance(value, int):
-            raise TypeError('Expected int')
+            raise TypeError('Очікували int')
         self._shares = value
 ```
 
-Normal attribute access now triggers the getter and setter methods
-under `@property` and `@shares.setter`.
+Звичайний доступ до атрибутів тепер запускає методи getter і setter у `@property` та `@shares.setter`.
 
 ```python
 >>> s = Stock('IBM', 50, 91.1)
->>> s.shares         # Triggers @property
+>>> s.shares         # Запускає @property
 50
->>> s.shares = 75    # Triggers @shares.setter
+>>> s.shares = 75    # Запускає @shares.setter
 >>>
 ```
 
-With this pattern, there are *no changes* needed to the source code.
-The new *setter* is also called when there is an assignment within the class,
-including inside the `__init__()` method.
+За допомогою цього шаблону *не потрібно змінювати* вихідний код. Новий *setter* також викликається, коли є призначення в межах класу, зокрема всередині методу `__init__()`.
 
 ```python
 class Stock:
     def __init__(self, name, shares, price):
         ...
-        # This assignment calls the setter below
+        # Це призначення викликає сеттер нижче
         self.shares = shares
         ...
 
@@ -161,15 +144,13 @@ class Stock:
     @shares.setter
     def shares(self, value):
         if not isinstance(value, int):
-            raise TypeError('Expected int')
+            raise TypeError('Очікували int')
         self._shares = value
 ```
 
-There is often a confusion between a property and the use of private names.
-Although a property internally uses a private name like `_shares`, the rest
-of the class (not the property) can continue to use a name like `shares`.
+Часто виникає плутанина між властивістю та використанням приватних імен. Хоча властивість внутрішньо використовує приватну назву, як-от `_shares`, решта класу (не властивість) може продовжувати використовувати назву, як-от `shares`.
 
-Properties are also useful for computed data attributes.
+Властивості також корисні для обчислюваних атрибутів даних.
 
 ```python
 class Stock:
@@ -184,38 +165,36 @@ class Stock:
     ...
 ```
 
-This allows you to drop the extra parantheses, hiding the fact that it's actually a method:
+Це дозволяє вам відкинути зайві дужки, приховуючи той факт, що це насправді метод:
 
 ```python
 >>> s = Stock('GOOG', 100, 490.1)
->>> s.shares # Instance variable
+>>> s.shares # Змінна екземпляра
 100
->>> s.cost   # Computed Value
+>>> s.cost   # Обчислене значення
 49010.0
 >>>
 ```
 
-### Uniform access
+### Рівномірний доступ
 
-The last example shows how to put a more uniform interface on an object.
-If you don't do this, an object might be confusing to use:
+Останній приклад показує, як надати більш однорідний інтерфейс об’єкту. Якщо ви цього не зробите, використання об’єкта може бути незрозумілим:
 
 ```python
 >>> s = Stock('GOOG', 100, 490.1)
->>> a = s.cost() # Method
+>>> a = s.cost() # Метод
 49010.0
->>> b = s.shares # Data attribute
+>>> b = s.shares # Атрибут даних
 100
 >>>
 ```
 
-Why is the `()` required for the cost, but not for the shares?  A property
-can fix this.
+Чому `()` потрібні для вартості, але не для акцій? Властивість може це виправити.
 
-### Decorator Syntax
+### Синтаксис декоратора
 
-The `@` syntax is known as "decoration".  It specifies a modifier
-that's applied to the function definition that immediately follows.
+Синтаксис `@` відомий як "декорація". Він визначає модифікатор
+який застосовано до визначення функції, що йде відразу за ним.
 
 ```python
 ...
@@ -224,11 +203,11 @@ def cost(self):
     return self.shares * self.price
 ```
 
-More details are given in [Section 7](../07_Advanced_Topics/00_Overview).
+Більш детальна інформація наведена в [Розділі 7](../07_Advanced_Topics/00_Overview).
 
-### `__slots__` Attribute
+### Атрибут `__slots__`
 
-You can restrict the set of attributes names.
+Ви можете обмежити набір імен атрибутів.
 
 ```python
 class Stock:
@@ -238,7 +217,7 @@ class Stock:
         ...
 ```
 
-It will raise an error for other attributes.
+Це викличе помилку для інших атрибутів.
 
 ```python
 >>> s.price = 385.15
@@ -248,24 +227,17 @@ File "<stdin>", line 1, in ?
 AttributeError: 'Stock' object has no attribute 'prices'
 ```
 
-Although this prevents errors and restricts usage of objects, it's actually used for performance and
-makes Python use memory more efficiently.
+Хоча це запобігає помилкам і обмежує використання об’єктів, насправді це використовується для підвищення продуктивності та дозволяє Python використовувати пам’ять ефективніше.
 
-### Final Comments on Encapsulation
+### Остаточні коментарі щодо інкапсуляції
 
-Don't go overboard with private attributes, properties, slots,
-etc. They serve a specific purpose and you may see them when reading
-other Python code.  However, they are not necessary for most
-day-to-day coding.
+Не перестарайтеся з приватними атрибутами, властивостями, слотами тощо. Вони служать певній меті, і ви можете побачити їх під час читання іншого коду Python. Однак вони не потрібні для більшості повсякденного кодування.
 
-## Exercises
+## Вправи
 
-### Exercise 5.6: Simple Properties
+### Вправа 5.6: Прості властивості
 
-Properties are a useful way to add "computed attributes" to an object.
-In `stock.py`, you created an object `Stock`.  Notice that on your
-object there is a slight inconsistency in how different kinds of data
-are extracted:
+Властивості є корисним способом додавання «обчислених атрибутів» до об’єкта. У `stock.py` ви створили об’єкт `Stock`. Зверніть увагу, що на вашому об’єкті є невелика невідповідність у тому, як витягуються різні типи даних:
 
 ```python
 >>> from stock import Stock
@@ -279,10 +251,9 @@ are extracted:
 >>>
 ```
 
-Specifically, notice how you have to add the extra () to `cost` because it is a method.
+Зокрема, зверніть увагу, як вам потрібно додати додаткові `()` до `cost`, оскільки це метод.
 
-You can get rid of the extra () on `cost()` if you turn it into a property.
-Take your `Stock` class and modify it so that the cost calculation works like this:
+Ви можете позбутися додаткових `()` у `cost()`, якщо перетворите його на властивість. Візьміть свій клас `Stock` і змініть його так, щоб розрахунок вартості працював так:
 
 ```python
 >>> ================================ RESTART ================================
@@ -293,24 +264,19 @@ Take your `Stock` class and modify it so that the cost calculation works like th
 >>>
 ```
 
-Try calling `s.cost()` as a function and observe that it
-doesn't work now that `cost` has been defined as a property.
+Спробуйте викликати `s.cost()` як функцію та помітьте, що вона не працює тепер, коли `cost` визначено як властивість.
 
 ```python
 >>> s.cost()
-... fails ...
+... помилка ...
 >>>
 ```
 
-Making this change will likely break your earlier `pcost.py` program.
-You might need to go back and get rid of the `()` on the `cost()` method.
+Внесення цієї зміни, ймовірно, порушить вашу попередню програму `pcost.py`. Можливо, вам доведеться повернутися назад і позбутися `()` у методі `cost()`.
 
-### Exercise 5.7: Properties and Setters
+### Вправа 5.7: Властивості та параметри
 
-Modify the `shares` attribute so that the value is stored in a
-private attribute and that a pair of property functions are used to ensure
-that it is always set to an integer value.  Here is an example of the expected
-behavior:
+Змініть атрибут `shares` так, щоб значення зберігалося в приватному атрибуті та щоб використовувалася пара функцій властивостей, щоб гарантувати, що воно завжди має ціле значення. Ось приклад очікуваної поведінки:
 
 ```python
 >>> ================================ RESTART ================================
@@ -320,14 +286,13 @@ behavior:
 >>> s.shares = 'a lot'
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-TypeError: expected an integer
+TypeError: очікувалось ціле число
 >>>
 ```
 
-### Exercise 5.8: Adding slots
+### Вправа 5.8: Додавання слотів
 
-Modify the `Stock` class so that it has a `__slots__` attribute.  Then,
-verify that new attributes can't be added:
+Змініть клас `Stock`, щоб він мав атрибут `__slots__`. Потім переконайтеся, що нові атрибути не можна додати:
 
 ```python
 >>> ================================ RESTART ================================
@@ -336,23 +301,18 @@ verify that new attributes can't be added:
 >>> s.name
 'GOOG'
 >>> s.blah = 42
-... see what happens ...
+... дивіться, що відбувається ...
 >>>
 ```
 
-When you use `__slots__`, Python uses a more efficient
-internal representation of objects.   What happens if you try to
-inspect the underlying dictionary of `s` above?
+Коли ви використовуєте `__slots__`, Python використовує більш ефективне внутрішнє представлення об’єктів. Що станеться, якщо ви спробуєте перевірити базовий словник `s` вище?
 
 ```python
 >>> s.__dict__
-... see what happens ...
+... дивіться, що відбувається ...
 >>>
 ```
 
-It should be noted that `__slots__` is most commonly used as an
-optimization on classes that serve as data structures.  Using slots
-will make such programs use far-less memory and run a bit faster.
-You should probably avoid `__slots__` on most other classes however.
+Слід зазначити, що `__slots__` найчастіше використовується для оптимізації класів, які служать структурами даних. Використання слотів змусить такі програми використовувати набагато менше пам’яті та працювати дещо швидше. Однак вам слід уникати `__slots__` у більшості інших класів.
 
 [Зміст](../Contents.md) \| [Попередній розділ (5.1. Перегляд словників)](01_Dicts_revisited.md) \| [Наступна частина (6. Генератори)](../06_Generators/00_Overview.md)
