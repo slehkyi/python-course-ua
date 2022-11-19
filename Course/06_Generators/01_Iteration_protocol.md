@@ -1,56 +1,55 @@
 [Зміст](../Contents.md) \| [Попередній розділ (5.2. Класи та інкапсуляція)](../05_Object_model/02_Classes_encapsulation.md) \| [Наступний розділ (6.2 Налаштування ітерації за допомогою генераторів)](02_Customizing_iteration.md)
 
-# 6.1 Iteration Protocol
+# 6.1 Протокол ітерації
 
-This section looks at the underlying process of iteration.
+У цьому розділі розглядається основний процес ітерації.
 
-### Iteration Everywhere
+### Ітерація всюди
 
-Many different objects support iteration.
+Багато різних об'єктів підтримують ітерацію.
 
 ```python
 a = 'hello'
-for c in a: # Loop over characters in a
+for c in a: # Ітерація символів в a
     ...
 
 b = { 'name': 'Dave', 'password':'foo'}
-for k in b: # Loop over keys in dictionary
+for k in b: # Ітерація ключів у словнику
     ...
 
 c = [1,2,3,4]
-for i in c: # Loop over items in a list/tuple
+for i in c: # Ітерація елементів у списку/таплі
     ...
 
 f = open('foo.txt')
-for x in f: # Loop over lines in a file
+for x in f: # Ітерація рядків у файлі
     ...
 ```
 
-### Iteration: Protocol
+### Ітерація: протокол
 
-Consider the `for`-statement.
+Розглянемо оператор `for`.
 
 ```python
 for x in obj:
-    # statements
+    # інші команди
 ```
 
-What happens under the hood?
+Що відбувається під капотом?
 
 ```python
-_iter = obj.__iter__()        # Get iterator object
+_iter = obj.__iter__()        # Отримати об'єкт ітератора
 while True:
     try:
-        x = _iter.__next__()  # Get next item
-        # statements ...
-    except StopIteration:     # No more items
+        x = _iter.__next__()  # Отримати наступний предмет
+        # інші команди ...
+    except StopIteration:     # Більше немає предметів
         break
 ```
 
-All the objects that work with the `for-loop` implement this low-level
-iteration protocol.
+Усі об’єкти, які працюють із циклом for, реалізують цей низькорівневий протокол ітерації.
 
-Example: Manual iteration over a list.
+Приклад: ручна ітерація по списку.
 
 ```python
 >>> x = [1,2,3]
@@ -69,10 +68,9 @@ File "<stdin>", line 1, in ? StopIteration
 >>>
 ```
 
-### Supporting Iteration
+### Підтримка ітерації
 
-Knowing about iteration is useful if you want to add it to your own objects.
-For example, making a custom container.
+Знання про ітерацію корисні, якщо ви хочете додати її до своїх власних об’єктів. Наприклад, зробити власний контейнер.
 
 ```python
 class Portfolio:
@@ -88,18 +86,17 @@ for s in port:
     ...
 ```
 
-## Exercises
+## Вправи
 
-### Exercise 6.1: Iteration Illustrated
+### Вправа 6.1: Ітерація
 
-Create the following list:
+Створіть такий список:
 
 ```python
 a = [1,9,4,25,16]
 ```
 
-Manually iterate over this list.  Call `__iter__()` to get an iterator and
-call the `__next__()` method to obtain successive elements.
+Перегляньте цей список вручну. Викличте `__iter__()`, щоб отримати ітератор, і викликайте метод `__next__()`, щоб отримати послідовні елементи.
 
 ```python
 >>> i = a.__iter__()
@@ -122,8 +119,7 @@ StopIteration
 >>>
 ```
 
-The `next()` built-in function is a shortcut for calling
-the `__next__()` method of an iterator. Try using it on a file:
+Вбудована функція `next()` — це ярлик для виклику методу `__next__()` ітератора. Спробуйте використати його у файлі:
 
 ```python
 >>> f = open('Data/portfolio.csv')
@@ -138,15 +134,11 @@ the `__next__()` method of an iterator. Try using it on a file:
 >>>
 ```
 
-Keep calling `next(f)` until you reach the end of the
-file. Watch what happens.
+Продовжуйте викликати `next(f)`, доки не дійдете до кінця файлу. Дивіться, що відбувається.
 
-### Exercise 6.2: Supporting Iteration
+### Вправа 6.2: Підтримка ітерації
 
-On occasion, you might want to make one of your own objects support
-iteration--especially if your object wraps around an existing
-list or other iterable.  In a new file `portfolio.py`, define the
-following class:
+Іноді ви можете зробити так, щоб один із ваших власних об’єктів підтримував ітерацію, особливо якщо ваш об’єкт обертається навколо існуючого списку або іншого ітерованого. У новому файлі `portfolio.py` визначте такий клас:
 
 ```python
 # portfolio.py
@@ -168,11 +160,9 @@ class Portfolio:
         return total_shares
 ```
 
-This class is meant to be a layer around a list, but with some
-extra methods such as the `total_cost` property.  Modify the `read_portfolio()`
-function in `report.py` so that it creates a `Portfolio` instance like this:
+Цей клас має бути шаром навколо списку, але з деякими додатковими методами, такими як властивість `total_cost`. Змініть функцію `read_portfolio()` у `report.py` так, щоб вона створювала екземпляр `Portfolio` так:
 
-```
+```python
 # report.py
 ...
 
@@ -195,8 +185,7 @@ def read_portfolio(filename):
 ...
 ```
 
-Try running the `report.py` program. You will find that it fails spectacularly due to the fact
-that `Portfolio` instances aren't iterable.
+Спробуйте запустити програму `report.py`. Ви побачите, що вона вражаюче падає через те, що екземпляри `Portfolio` не піддаються ітерації.
 
 ```python
 >>> import report
@@ -204,7 +193,7 @@ that `Portfolio` instances aren't iterable.
 ... crashes ...
 ```
 
-Fix this by modifying the `Portfolio` class to support iteration:
+Виправте це, змінивши клас `Portfolio` для підтримки ітерації:
 
 ```python
 class Portfolio:
@@ -227,8 +216,7 @@ class Portfolio:
         return total_shares
 ```
 
-After you've made this change, your `report.py` program should work again.   While you're
-at it, fix up your `pcost.py` program to use the new `Portfolio` object. Like this:
+Після внесення цієї зміни ваша програма `report.py` має працювати знову. Поки ви це робите, виправте свою програму `pcost.py`, щоб використовувати новий об’єкт `Portfolio`. Ось так:
 
 ```python
 # pcost.py
@@ -244,7 +232,7 @@ def portfolio_cost(filename):
 ...
 ```
 
-Test it to make sure it works:
+Перевірте, щоб переконатися, що він працює:
 
 ```python
 >>> import pcost
@@ -253,11 +241,9 @@ Test it to make sure it works:
 >>>
 ```
 
-### Exercise 6.3: Making a more proper container
+### Вправа 6.3: Створення більш правильного контейнера
 
-If making a container class, you often want to do more than just
-iteration. Modify the `Portfolio` class so that it has some other
-special methods like this:
+Створюючи клас-контейнер, ви часто хочете робити більше, ніж просто ітерацію. Змініть клас `Portfolio`, щоб він мав інші спеціальні методи, подібні до цього:
 
 ```python
 class Portfolio:
@@ -288,7 +274,7 @@ class Portfolio:
         return total_shares
 ```
 
-Now, try some experiments using this new class:
+Тепер спробуйте кілька експериментів, використовуючи цей новий клас:
 
 ```
 >>> import report
@@ -308,10 +294,6 @@ False
 >>>
 ```
 
-One important observation about this--generally code is considered
-"Pythonic" if it speaks the common vocabulary of how other parts of
-Python normally work.  For container objects, supporting iteration,
-indexing, containment, and other kinds of operators is an important
-part of this.
+Одне важливе зауваження щодо цього: зазвичай код вважається «Python», якщо він розмовляє звичайним словником того, як зазвичай працюють інші частини Python. Для об’єктів-контейнерів підтримка ітерації, індексування, утримування та інших типів операторів є важливою частиною цього.
 
 [Зміст](../Contents.md) \| [Попередній розділ (5.2. Класи та інкапсуляція)](../05_Object_model/02_Classes_encapsulation.md) \| [Наступний розділ (6.2 Налаштування ітерації за допомогою генераторів)](02_Customizing_iteration.md)
