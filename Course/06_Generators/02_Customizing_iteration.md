@@ -1,14 +1,14 @@
 [Зміст](../Contents.md) \| [Попередній розділ (6.1 Протокол ітерації)](01_Iteration_protocol.md) \| [Наступний розділ (6.3 Проблеми виробника/споживача та робочі процеси)](03_Producers_consumers.md)
 
-# 6.2 Customizing Iteration
+# 6.2 Налаштування ітерації
 
-This section looks at how you can customize iteration using a generator function.
+У цьому розділі розглядається, як можна налаштувати ітерацію за допомогою функції генератора.
 
-### A problem
+### Проблема
 
-Suppose you wanted to create your own custom iteration pattern.
+Припустімо, ви хочете створити свій власний ітераційний шаблон.
 
-For example, a countdown.
+Наприклад, зворотний відлік.
 
 ```python
 >>> for x in countdown(10):
@@ -18,11 +18,11 @@ For example, a countdown.
 >>>
 ```
 
-There is an easy way to do this.
+Для цього є простий спосіб.
 
-### Generators
+### Генератори
 
-A generator is a function that defines iteration.
+Генератор — це функція, яка визначає ітерацію.
 
 ```python
 def countdown(n):
@@ -31,7 +31,7 @@ def countdown(n):
         n -= 1
 ```
 
-For example:
+Наприклад:
 
 ```python
 >>> for x in countdown(10):
@@ -41,15 +41,13 @@ For example:
 >>>
 ```
 
-A generator is any function that uses the `yield` statement.
+Генератор — це будь-яка функція, яка використовує оператор `yield`.
 
-The behavior of generators is different than a normal function.
-Calling a generator function creates a generator object. It does not
-immediately execute the function.
+Поведінка генераторів відрізняється від звичайної функції. Виклик функції генератора створює об’єкт генератора. Він не виконує функцію негайно.
 
 ```python
 def countdown(n):
-    # Added a print statement
+    # Додано рядок про вивід
     print('Counting down from', n)
     while n > 0:
         yield n
@@ -58,14 +56,14 @@ def countdown(n):
 
 ```python
 >>> x = countdown(10)
-# There is NO PRINT STATEMENT
+# Виводу немає
 >>> x
-# x is a generator object
+# x є об'єктом генератора
 <generator object at 0x58490>
 >>>
 ```
 
-The function only executes on `__next__()` call.
+Функція виконується лише під час виклику `__next__()`.
 
 ```python
 >>> x = countdown(10)
@@ -77,8 +75,8 @@ Counting down from 10
 >>>
 ```
 
-`yield` produces a value, but suspends the function execution.
-The function resumes on next call to `__next__()`.
+`yield` створює значення, але призупиняє виконання функції.
+Функція відновлює роботу після наступного виклику `__next__()`.
 
 ```python
 >>> x.__next__()
@@ -87,7 +85,7 @@ The function resumes on next call to `__next__()`.
 8
 ```
 
-When the generator finally returns, the iteration raises an error.
+Коли генератор нарешті повертається, ітерація викликає помилку.
 
 ```python
 >>> x.__next__()
@@ -98,21 +96,15 @@ File "<stdin>", line 1, in ? StopIteration
 >>>
 ```
 
-*Observation: A generator function implements the same low-level
- protocol that the for statements uses on lists, tuples, dicts, files,
- etc.*
+*Спостереження: функція генератора реалізує той самий протокол низького рівня, який використовує оператор for для списків, кортежів, dicts, файлів тощо.*
 
-## Exercises
+## Вправи
 
-### Exercise 6.4: A Simple Generator
+### Вправа 6.4: Простий генератор
 
-If you ever find yourself wanting to customize iteration, you should
-always think generator functions.  They're easy to write---make
-a function that carries out the desired iteration logic and use `yield`
-to emit values.
+Якщо вам колись захочеться налаштувати ітерацію, вам завжди слід думати про функції генератора. Їх легко написати --- створіть функцію, яка виконує бажану логіку ітерації, і використовуйте `yield` для видачі значень.
 
-For example, try this generator that searches a file for lines containing
-a matching substring:
+Наприклад, спробуйте цей генератор, який шукає у файлі рядки, що містять відповідний підрядок:
 
 ```python
 >>> def filematch(filename, substr):
@@ -140,36 +132,23 @@ name,shares,price
 >>>
 ```
 
-This is kind of interesting--the idea that you can hide a bunch of
-custom processing in a function and use it to feed a for-loop.
-The next example looks at a more unusual case.
+Це начебто цікаво — ідея, що ви можете приховати купу нестандартної обробки у функції та використовувати її для живлення циклу for. Наступний приклад розглядає більш незвичайний випадок.
 
-### Exercise 6.5: Monitoring a streaming data source
+### Вправа 6.5: Моніторинг джерела потокових даних
 
-Generators can be an interesting way to monitor real-time data sources
-such as log files or stock market feeds.  In this part, we'll
-explore this idea.  To start, follow the next instructions carefully.
+Генератори можуть бути цікавим способом моніторингу джерел даних у реальному часі, таких як файли журналів або канали фондового ринку. У цій частині ми розглянемо цю ідею. Щоб почати, уважно дотримуйтеся наступних інструкцій.
 
-The program `Data/stocksim.py` is a program that
-simulates stock market data.  As output, the program constantly writes
-real-time data to a file `Data/stocklog.csv`.  In a
-separate command window go into the `Data/` directory and run this program:
+Програма `Data/stocksim.py` — це програма, яка моделює дані фондового ринку. На виході програма постійно записує дані реального часу у файл `Data/stocklog.csv`. 
+
+В окремому командному вікні перейдіть до каталогу `Data/` і запустіть цю програму:
 
 ```bash
 bash % python3 stocksim.py
 ```
 
-If you are on Windows, just locate the `stocksim.py` program and
-double-click on it to run it.  Now, forget about this program (just
-let it run).  Using another window, look at the file
-`Data/stocklog.csv` being written by the simulator.  You should see
-new lines of text being added to the file every few seconds.  Again,
-just let this program run in the background---it will run for several
-hours (you shouldn't need to worry about it).
+Якщо ви використовуєте Windows, просто знайдіть програму `stocksim.py` і двічі клацніть її, щоб запустити її. Тепер забудьте про цю програму (просто дайте їй працювати). В іншому вікні перегляньте файл `Data/stocklog.csv`, який записує симулятор. Ви повинні бачити нові рядки тексту, які додаються до файлу кожні кілька секунд. Знову ж таки, просто дайте цій програмі працювати у фоновому режимі --- вона працюватиме протягом кількох годин (вам не потрібно про це турбуватися).
 
-Once the above program is running, let's write a little program to
-open the file, seek to the end, and watch for new output.  Create a
-file `follow.py` and put this code in it:
+Після того, як програма вище запущена, давайте напишемо невелику програму, щоб відкрити файл, перейти до кінця та спостерігати за новими результатами. Створіть файл `follow.py` і вставте в нього цей код:
 
 ```python
 # follow.py
@@ -177,12 +156,12 @@ import os
 import time
 
 f = open('Data/stocklog.csv')
-f.seek(0, os.SEEK_END)   # Move file pointer 0 bytes from end of file
+f.seek(0, os.SEEK_END)   # Перемістити вказівник файлу на 0 байтів від кінця файлу
 
 while True:
     line = f.readline()
     if line == '':
-        time.sleep(0.1)   # Sleep briefly and retry
+        time.sleep(0.1)   # Недовго поспати та повторити спробу
         continue
     fields = line.split(',')
     name = fields[0].strip('"')
@@ -192,35 +171,24 @@ while True:
         print(f'{name:>10s} {price:>10.2f} {change:>10.2f}')
 ```
 
-If you run the program, you'll see a real-time stock ticker.  Under the hood,
-this code is kind of like the Unix `tail -f` command that's used to watch a log file.
+Якщо ви запустите програму, ви побачите біржовий тикер у реальному часі. Під капотом цей код схожий на команду Unix `tail -f`, яка використовується для перегляду файлу журналу.
 
-Note: The use of the `readline()` method in this example is
-somewhat unusual in that it is not the usual way of reading lines from
-a file (normally you would just use a `for`-loop).  However, in
-this case, we are using it to repeatedly probe the end of the file to
-see if more data has been added (`readline()` will either
-return new data or an empty string).
+Примітка. Використання методу `readline()` у цьому прикладі є дещо незвичним, оскільки це не звичайний спосіб читання рядків із файлу (зазвичай ви використовуєте лише цикл `for`). Однак у цьому випадку ми використовуємо його, щоб неодноразово перевіряти кінець файлу, щоб побачити, чи було додано більше даних (`readline()` поверне нові дані або порожній рядок).
 
-### Exercise 6.6: Using a generator to produce data
+### Вправа 6.6: Використання генератора для створення даних
 
-If you look at the code in Exercise 6.5, the first part of the code is producing
-lines of data whereas the statements at the end of the `while` loop are consuming
-the data.  A major feature of generator functions is that you can move all
-of the data production code into a reusable function.
+Якщо ви подивитеся на код у вправі 6.5, перша частина коду створює рядки даних, тоді як оператори в кінці циклу `while` споживають дані. Основна особливість функцій генератора полягає в тому, що ви можете перемістити весь код виробництва даних у функцію для повторного використання.
 
-Modify the code in Exercise 6.5  so that the file-reading is performed by
-a generator function `follow(filename)`.   Make it so the following code
-works:
+Змініть код у вправі 6.5 так, щоб читання файлу виконувалося функцією генератора `follow(filename)`. Зробіть так, щоб наступний код працював:
 
 ```python
 >>> for line in follow('Data/stocklog.csv'):
           print(line, end='')
 
-... Should see lines of output produced here ...
+... Маєте бачити рядки вихідних даних, створені тут ...
 ```
 
-Modify the stock ticker code so that it looks like this:
+Змініть біржовий код, щоб він виглядав так:
 
 
 ```python
@@ -234,11 +202,9 @@ if __name__ == '__main__':
             print(f'{name:>10s} {price:>10.2f} {change:>10.2f}')
 ```
 
-### Exercise 6.7: Watching your portfolio
+### Вправа 6.7: Перегляд вашого портфоліо
 
-Modify the `follow.py` program so that it watches the stream of stock
-data and prints a ticker showing information for only those stocks
-in a portfolio.  For example:
+Змініть програму `follow.py`, щоб вона спостерігала за потоком даних про акції та друкувала тікер, який показує інформацію лише для тих акцій у портфелі. Наприклад:
 
 ```python
 if __name__ == '__main__':
@@ -255,16 +221,10 @@ if __name__ == '__main__':
             print(f'{name:>10s} {price:>10.2f} {change:>10.2f}')
 ```
 
-Note: For this to work, your `Portfolio` class must support the `in`
-operator.  See [Exercise 6.3](01_Iteration_protocol) and make sure you
-implement the `__contains__()` operator.
+Примітка: щоб це працювало, ваш клас `Portfolio` має підтримувати оператор `in`. Перегляньте [Вправа 6.3](01_Iteration_protocol) і переконайтеся, що ви застосовуєте оператор `__contains__()`.
 
-### Discussion
+### Обговорення
 
-Something very powerful just happened here.  You moved an interesting iteration pattern
-(reading lines at the end of a file) into its own little function.   The `follow()` function
-is now this completely general purpose utility that you can use in any program.  For
-example, you could use it to watch server logs, debugging logs, and other similar data sources.
-That's kind of cool.
+Щойно тут сталося щось дуже потужне. Ви перемістили цікавий шаблон ітерації (читання рядків у кінці файлу) у власну маленьку функцію. Функція `follow()` тепер є цією утилітою загального призначення, яку можна використовувати в будь-якій програмі. Наприклад, ви можете використовувати його для перегляду журналів сервера, журналів налагодження та інших подібних джерел даних. Це якось круто.
 
 [Зміст](../Contents.md) \| [Попередній розділ (6.1 Протокол ітерації)](01_Iteration_protocol.md) \| [Наступний розділ (6.3 Проблеми виробника/споживача та робочі процеси)](03_Producers_consumers.md)
